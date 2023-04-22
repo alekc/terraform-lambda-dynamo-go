@@ -74,6 +74,8 @@ data "aws_iam_policy_document" "extra" {
       "ec2:DescribeInstances",
       "ec2:AttachNetworkInterface",
     ]
+    #checkov:skip=CKV_AWS_111:False positive, we do limit by VPC
+    #tfsec:ignore:aws-iam-no-policy-wildcards we do restrict by arn
     resources = ["*"]
     condition {
       test     = "ArnLikeIfExists"

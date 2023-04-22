@@ -7,6 +7,7 @@ data "aws_iam_policy_document" "vpc_endpoints" {
   #checkov:skip=CKV_AWS_49:Vpc endpoint resource
   #checkov:skip=CKV_AWS_111:Vpc endpoint resource
   #checkov:skip=CKV_AWS_108:Vpc endpoint resource
+  #checkov:skip=CKV_AWS_107:Vpc endpoint resource
   statement {
     principals {
       type        = "AWS"
