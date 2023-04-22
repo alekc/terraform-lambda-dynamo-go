@@ -18,14 +18,15 @@ resource "aws_dynamodb_table" "main" {
     enabled = true
   }
 }
-
+resource "random_uuid" "qtd_row_1" {
+}
 resource "aws_dynamodb_table_item" "qtd" {
   table_name = aws_dynamodb_table.main.name
   hash_key   = aws_dynamodb_table.main.hash_key
 
   item = <<ITEM
 {
-  "ID": {"S": "${uuid()}"},
+  "ID": {"S": "${random_uuid.qtd_row_1.result}"},
   "text": {"S": "What you do today can improve all your tomorrows."}
 }
 ITEM

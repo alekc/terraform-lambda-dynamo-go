@@ -19,6 +19,11 @@ resource "aws_lambda_function" "func" {
   timeout                        = 30
   reserved_concurrent_executions = 10 # POC limit
 
+  # improves an issue where you cannot delete a security group because it's in use by a random ENI
+  # see https://github.com/hashicorp/terraform-provider-aws/issues/10329#issuecomment-1425914496
+  replace_security_groups_on_destroy = true
+  replacement_security_group_ids     = [module.vpc.default_security_group_id]
+
   kms_key_arn = aws_kms_key.encryptor.arn # see https://docs.bridgecrew.io/docs/bc_aws_serverless_5
 
   environment {
@@ -28,5 +33,11 @@ resource "aws_lambda_function" "func" {
   }
   tracing_config {
     mode = "Active"
+  }
+  vpc_config {
+    subnet_ids = module.vpc.private_subnets
+    security_group_ids = [
+      aws_security_group.lambda.id
+    ]
   }
 }

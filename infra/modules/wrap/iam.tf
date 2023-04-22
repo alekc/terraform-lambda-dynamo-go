@@ -1,4 +1,5 @@
 data "aws_iam_policy_document" "lambda_assume_role" {
+  #checkov:skip=CKV_AWS_111::Allow write without constraints for POC purposes
   version = "2012-10-17"
   statement {
     effect  = "Allow"
@@ -42,8 +43,7 @@ resource "aws_iam_role_policy_attachment" "logs" {
   policy_arn = aws_iam_policy.logs.arn
 }
 
-# DynamoDb && KMS
-data "aws_iam_policy_document" "dynamo" {
+data "aws_iam_policy_document" "extra" {
   version = "2012-10-17"
   statement {
     effect = "Allow"
@@ -65,13 +65,29 @@ data "aws_iam_policy_document" "dynamo" {
       aws_kms_key.encryptor.arn
     ]
   }
+  statement {
+    effect = "Allow"
+    actions = [
+      "ec2:DescribeNetworkInterfaces",
+      "ec2:CreateNetworkInterface",
+      "ec2:DeleteNetworkInterface",
+      "ec2:DescribeInstances",
+      "ec2:AttachNetworkInterface",
+    ]
+    resources = ["*"]
+    condition {
+      test     = "ArnLikeIfExists"
+      variable = "ec2:Vpc"
+      values   = [module.vpc.vpc_arn]
+    }
+  }
 }
 
-resource "aws_iam_policy" "dynamodb" {
-  name_prefix = "${local.name}-dynamodb"
-  policy      = data.aws_iam_policy_document.dynamo.json
+resource "aws_iam_policy" "extra" {
+  name_prefix = "${local.name}-permissions"
+  policy      = data.aws_iam_policy_document.extra.json
 }
-resource "aws_iam_role_policy_attachment" "dynamodb" {
+resource "aws_iam_role_policy_attachment" "extra" {
   role       = aws_iam_role.lambda.name
-  policy_arn = aws_iam_policy.dynamodb.arn
+  policy_arn = aws_iam_policy.extra.arn
 }
