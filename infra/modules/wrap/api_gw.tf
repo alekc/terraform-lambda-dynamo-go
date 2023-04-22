@@ -1,5 +1,5 @@
 resource "aws_apigatewayv2_api" "main" {
-  name          = "serverless_lambda_gw"
+  name          = local.name
   protocol_type = "HTTP"
 }
 
@@ -42,12 +42,6 @@ resource "aws_apigatewayv2_route" "index" {
   # for the purposes of this demo I will use a $default route
   route_key = "$default"
   target    = "integrations/${aws_apigatewayv2_integration.demo.id}"
-}
-
-resource "aws_cloudwatch_log_group" "api_gw" {
-  name = "/aws/api_gw/${aws_apigatewayv2_api.main.name}"
-
-  retention_in_days = 1 # for the demo purposes, on actual deployment this is going to be higher
 }
 
 resource "aws_lambda_permission" "api_gw" {

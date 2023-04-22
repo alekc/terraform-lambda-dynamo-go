@@ -17,14 +17,17 @@ resource "aws_iam_role" "lambda" {
 }
 
 # Logs Policy
+#tfsec:ignore:aws-iam-no-policy-wildcards false positive (we are limiting it to lambda name path)
 data "aws_iam_policy_document" "logs" {
   version = "2012-10-17"
   statement {
     effect  = "Allow"
     actions = ["logs:CreateLogStream", "logs:PutLogEvents"]
 
+
+
     resources = [
-      "arn:aws:logs:${data.aws_region.current.name}:${local.account_id}:log-group:/aws/lambda/${local.name}*:*"
+      "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:${aws_cloudwatch_log_group.log.name}*:*"
     ]
   }
 }
@@ -39,7 +42,7 @@ resource "aws_iam_role_policy_attachment" "logs" {
   policy_arn = aws_iam_policy.logs.arn
 }
 
-# DynamoDbPolicy
+# DynamoDb && KMS
 data "aws_iam_policy_document" "dynamo" {
   version = "2012-10-17"
   statement {
@@ -51,7 +54,15 @@ data "aws_iam_policy_document" "dynamo" {
 
     resources = [
       aws_dynamodb_table.main.arn
-      #      "arn:aws:dynamodb:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:table/${aws_dynamodb_table.main.name}"
+    ]
+  }
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = [
+      aws_kms_key.encryptor.arn
     ]
   }
 }
