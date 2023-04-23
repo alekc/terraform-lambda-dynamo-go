@@ -15,7 +15,9 @@ cd ..
 
 echo "### Deploying tf stack ###"
 cd infra
-#terraform init -input=false
+rm -rf ./bin/
+
+terraform init -input=false
 terraform apply -input=false -auto-approve
 cd ../
 

@@ -21,8 +21,8 @@ resource "aws_lambda_function" "func" {
 
   # improves an issue where you cannot delete a security group because it's in use by a random ENI
   # see https://github.com/hashicorp/terraform-provider-aws/issues/10329#issuecomment-1425914496
-  replace_security_groups_on_destroy = true
-  replacement_security_group_ids     = [module.vpc.default_security_group_id]
+  replace_security_groups_on_destroy = var.deploy_to_vpc ? true : false
+  replacement_security_group_ids     = var.deploy_to_vpc ? [module.vpc[0].default_security_group_id] : []
 
   kms_key_arn = aws_kms_key.encryptor.arn # see https://docs.bridgecrew.io/docs/bc_aws_serverless_5
 
@@ -34,10 +34,13 @@ resource "aws_lambda_function" "func" {
   tracing_config {
     mode = "Active"
   }
-  vpc_config {
-    subnet_ids = module.vpc.private_subnets
-    security_group_ids = [
-      aws_security_group.lambda.id
-    ]
+  dynamic "vpc_config" {
+    for_each = var.deploy_to_vpc ? [1] : []
+    content {
+      subnet_ids = module.vpc[0].private_subnets
+      security_group_ids = [
+        aws_security_group.lambda[0].id
+      ]
+    }
   }
 }

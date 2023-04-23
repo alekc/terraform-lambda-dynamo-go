@@ -20,9 +20,10 @@ data "aws_iam_policy_document" "vpc_endpoints" {
 }
 
 resource "aws_vpc_endpoint" "dynamodb" {
-  vpc_id            = module.vpc.vpc_id
+  count             = var.deploy_to_vpc ? 1 : 0
+  vpc_id            = module.vpc[0].vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.name}.dynamodb"
   vpc_endpoint_type = "Gateway"
-  route_table_ids   = module.vpc.private_route_table_ids
+  route_table_ids   = module.vpc[0].private_route_table_ids
   policy            = data.aws_iam_policy_document.vpc_endpoints.json
 }

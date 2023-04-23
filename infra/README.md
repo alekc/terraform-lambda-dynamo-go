@@ -24,7 +24,9 @@ No resources.
 
 ## Inputs
 
-No inputs.
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| <a name="input_deploy_to_vpc"></a> [deploy\_to\_vpc](#input\_deploy\_to\_vpc) | If true, will create a VPC and deploy the lambda to it | `bool` | n/a | yes |
 
 ## Outputs
 
