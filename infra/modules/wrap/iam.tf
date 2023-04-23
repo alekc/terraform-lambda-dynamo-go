@@ -109,3 +109,7 @@ resource "aws_iam_role_policy_attachment" "vpc_permissions" {
   role       = aws_iam_role.lambda.name
   policy_arn = aws_iam_policy.vpc_permissions[0].arn
 }
+resource "aws_iam_role_policy_attachment" "xray" {
+  role       = aws_iam_role.lambda.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSXRayDaemonWriteAccess"
+}

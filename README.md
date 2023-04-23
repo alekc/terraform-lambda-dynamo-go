@@ -53,7 +53,10 @@ The successful operation of this stack depends on the presence of the following 
 * Pre-commit (optional, used to check the code quality. For installations see the [related page](https://github.com/antonbabenko/pre-commit-terraform#1-install-dependencies))
 
 ### Automated deployment
-You can deploy the whole stack with zero input via `deploy.sh`
+You can deploy the whole stack with zero input via `deploy.sh`.
+
+**Note** if you are using `deploy.sh` in your CICD / ephemeral environment, you will need to amend the build stage and reset
+executable's metadata, otherwise it will force a new deployment on every single terraform run.
 
 ### Manual deployment
 To manually deploy the stack, you need to follow the steps below:

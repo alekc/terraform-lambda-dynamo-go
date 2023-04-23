@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	handler := handler.Create()
-	lambda.Start(handler.Run)
+	qtdHandler := handler.Create()
+	lambda.Start(qtdHandler.Run)
 }

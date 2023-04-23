@@ -27,6 +27,7 @@ No resources.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_deploy_to_vpc"></a> [deploy\_to\_vpc](#input\_deploy\_to\_vpc) | If true, will create a VPC and deploy the lambda to it | `bool` | n/a | yes |
+| <a name="input_lambda_log_level"></a> [lambda\_log\_level](#input\_lambda\_log\_level) | Lambda level log. Possible values are debug, info, warning | `string` | `"debug"` | no |
 
 ## Outputs
 

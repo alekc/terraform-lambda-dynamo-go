@@ -29,6 +29,7 @@ resource "aws_lambda_function" "func" {
   environment {
     variables = {
       DYNAMO_QTD_TABLE = aws_dynamodb_table.main.name
+      LOG_LEVEL        = var.lambda_log_level
     }
   }
   tracing_config {
