@@ -45,6 +45,10 @@ wait for the detachment of those ENI. This process can take up to an hour under 
 ![standalone lambda](./docs/images/vpc.svg)
 
 ## Deployment
+### Configuration
+You can configure the stack behaviour by editing variables in `config.auto.tfvars`. For further information about possible
+configuration values see `variables.tf`
+
 ### Requirements
 The successful operation of this stack depends on the presence of the following software elements:
 * Golang 1.20
